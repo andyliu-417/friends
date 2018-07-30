@@ -8,7 +8,7 @@
 import scrapy
 
 
-class ScrapiesItem(scrapy.Item):
+class TranscriptItem(scrapy.Item):
     # define the fields for your item here like:
     season = scrapy.Field()
     episode = scrapy.Field()

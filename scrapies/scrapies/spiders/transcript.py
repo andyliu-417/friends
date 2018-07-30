@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from scrapies.items import ScrapiesItem
+from scrapies.items import TranscriptItem
 import re
 import os
 
@@ -30,8 +30,8 @@ class TranscriptSpider(scrapy.Spider):
         s = re_h.sub('', s)  # 去掉HTML 标签
         s = re_comment.sub('', s)  # 去掉HTML注释
         # 去掉多余的空行
-        blank_line = re.compile('\n+')
-        s = blank_line.sub('\n', s)
+        # blank_line = re.compile('\n+')
+        # s = blank_line.sub('\n', s)
         s = self.replaceCharEntity(s)  # 替换实体
         return s
 
@@ -65,17 +65,17 @@ class TranscriptSpider(scrapy.Spider):
             yield scrapy.Request(url=episode_url, callback=self.parse_transcript)
 
     def parse_transcript(self, response):
-        result = re.findall("/(\d+)", response.url)[0]
+        result = re.findall(r"/(\d+)", response.url)[0]
         season = int(int(result)/100)
         episode = int(result) - season*100
         transcript_name = str(season) + '-' + str(episode) + ".txt"
         transcript_path = os.path.join(self.path, transcript_name)
 
-        content = self.filter_tags(response.text.strip())
-        transcript = open(transcript_path, "w")
+        content = self.filter_tags(response.text)
+        with open(transcript_path, 'a') as transcript:
+            transcript.write(content + '\n')
         print("文件名为: ", transcript.name)
-        transcript.write(content)
-        transcript.close()
+
 
 
     # item = ScrapiesItem()

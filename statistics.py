@@ -109,13 +109,13 @@ def write_to_file(words, file='results.txt'):
 
 if __name__ == '__main__':
     transcript_dir = os.path.abspath(
-        os.path.join(os.getcwd(), "./transcripts"))
+        os.path.join(os.getcwd(), "./scrapies/transcripts"))
     transcript_path = os.path.join(transcript_dir, "all.text")
     print(transcript_path)
     start = time.time()
 
     words = get_words(transcript_path)
-    print(words)
+    write_to_file(append_ext(words.most_common()))
     end = time.time()
     print("total time:", (end-start))
-# write_to_file(append_ext(words.most_common()))
+
